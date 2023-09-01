@@ -2,7 +2,7 @@ import { conectaApi } from "./conectaApi.js"
 
 const lista = document.querySelector('[data-lista]');
 
-function constroiCard(titulo,descricao,imagem,url){
+export default function constroiCard(titulo,descricao,imagem,url){
     const video = document.createElement('li');
     video.className = 'videos__item';
     video.innerHTML += `
@@ -21,11 +21,16 @@ function constroiCard(titulo,descricao,imagem,url){
 };
 
 async function listavideos(){
-    const listaApi = await conectaApi.listaVideos();
-    listaApi.forEach(elemento => lista.appendChild(
-        constroiCard(elemento.titulo,elemento.descricao,elemento.imagem,elemento.url)
-        )
-    );
+    try{
+        const listaApi = await conectaApi.listaVideos();
+        listaApi.forEach(elemento => lista.appendChild(
+            constroiCard(elemento.titulo,elemento.descricao,elemento.imagem,elemento.url)
+            )
+        );
+
+    } catch {
+        lista.innerHTML = `<h2 class="mensagem__titulo">Não foi possivel carregar a lista de vídeos</h2>`
+    }
 };
 
 listavideos()
